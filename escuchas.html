@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+
+<meta charset="UTF-8">
+<title>Escuchas Interceptadas - Policía Nacional</title>
+
+<style>
+
+body{
+background:#050505;
+color:#00ff66;
+font-family:Courier New, monospace;
+margin:0;
+padding:0;
+}
+
+.database{
+width:800px;
+margin:auto;
+margin-top:80px;
+}
+
+h1{
+border-bottom:1px solid #00ff66;
+padding-bottom:10px;
+}
+
+.classification{
+color:#ff4444;
+font-size:14px;
+}
+
+.warning{
+font-size:12px;
+margin-bottom:20px;
+}
+
+.case{
+border:1px solid #00ff66;
+padding:20px;
+margin-top:20px;
+}
+
+a{
+color:#00ff66;
+text-decoration:none;
+}
+
+audio{
+width:100%;
+margin-top:10px;
+background:black;
+}
+
+/* Sistema de audio */
+
+.audio-system{
+margin-top:15px;
+padding:15px;
+border:1px solid #00ff66;
+background:#000;
+box-shadow:0 0 10px #00ff66;
+}
+
+.status{
+font-size:13px;
+margin-bottom:10px;
+}
+
+/* Onda de audio */
+
+.wave{
+display:flex;
+gap:4px;
+height:20px;
+margin-bottom:10px;
+}
+
+.wave span{
+width:4px;
+background:#00ff66;
+animation:wave 1s infinite ease-in-out;
+}
+
+.wave span:nth-child(2){animation-delay:0.1s;}
+.wave span:nth-child(3){animation-delay:0.2s;}
+.wave span:nth-child(4){animation-delay:0.3s;}
+.wave span:nth-child(5){animation-delay:0.4s;}
+
+@keyframes wave{
+0%{height:5px;}
+50%{height:20px;}
+100%{height:5px;}
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="database">
+
+<h1>SISTEMA DE INTERCEPCIÓN DE COMUNICACIONES</h1>
+
+<p class="classification">
+DIVISIÓN DE INTELIGENCIA - POLICÍA NACIONAL
+</p>
+
+<p class="warning">
+ARCHIVOS DE AUDIO CLASIFICADOS - ACCESO RESTRINGIDO
+</p>
+
+
+<div class="case">
+
+<h3>INTERCEPTACIÓN 001</h3>
+
+<p>Mensaje de voz interceptado en canal cifrado.</p>
+
+<div class="audio-system">
+
+<div class="status" id="estado1">
+SISTEMA LISTO
+</div>
+
+<div class="wave">
+<span></span><span></span><span></span><span></span><span></span>
+</div>
+
+<audio controls onplay="reproduciendo('estado1')" onpause="pausado('estado1')">
+<source src="audios/interceptacion1.mp3" type="audio/mpeg">
+</audio>
+
+</div>
+
+</div>
+
+
+<div class="case">
+
+<h3>INTERCEPTACIÓN 002</h3>
+
+<p>Audio recuperado de dispositivo del sospechoso.</p>
+
+<div class="audio-system">
+
+<div class="status" id="estado2">
+SISTEMA LISTO
+</div>
+
+<div class="wave">
+<span></span><span></span><span></span><span></span><span></span>
+</div>
+
+<audio controls onplay="reproduciendo('estado2')" onpause="pausado('estado2')">
+<source src="audios/interceptacion2.mp3" type="audio/mpeg">
+</audio>
+
+</div>
+
+</div>
+
+
+<br>
+
+<a href="index.html">← VOLVER A BASE DE DATOS</a>
+
+</div>
+
+<script>
+
+function reproduciendo(id){
+
+document.getElementById(id).innerText =
+"REPRODUCIENDO INTERCEPTACIÓN...";
+
+}
+
+function pausado(id){
+
+document.getElementById(id).innerText =
+"REPRODUCCIÓN PAUSADA";
+
+}
+
+</script>
+
+</body>
+</html>

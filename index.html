@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Terminal Segura - Policía Nacional</title>
+<style>
+body{
+  background:#050505;
+  color:#00ff66;
+  font-family:Courier New, monospace;
+  margin:0;
+  padding:0;
+}
+.center{
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  height:100vh;
+}
+.terminal{
+  border:2px solid #00ff66;
+  padding:40px;
+  width:600px;
+  box-shadow:0 0 25px #00ff66;
+  text-align:center;
+}
+.database{
+  width:800px;
+  margin:auto;
+  margin-top:80px;
+}
+h1{
+  border-bottom:1px solid #00ff66;
+  padding-bottom:10px;
+}
+.classification{
+  color:#ff4444;
+  font-size:14px;
+}
+.warning{
+  font-size:12px;
+  margin-bottom:20px;
+}
+input{
+  width:100%;
+  padding:10px;
+  background:black;
+  border:1px solid #00ff66;
+  color:#00ff66;
+  margin-top:20px;
+}
+button{
+  margin-top:20px;
+  padding:10px;
+  width:100%;
+  background:#001a00;
+  border:1px solid #00ff66;
+  color:#00ff66;
+  cursor:pointer;
+}
+.case{
+  border:1px solid #00ff66;
+  padding:20px;
+  margin-top:20px;
+}
+a{
+  color:#00ff66;
+  text-decoration:none;
+}
+.hidden{
+  display:none;
+}
+</style>
+</head>
+<body>
+
+<!-- Pantalla de login -->
+<div class="center" id="loginScreen">
+  <div class="terminal">
+    <h1>TERMINAL SEGURA - POLICÍA NACIONAL</h1>
+    <p class="classification">NIVEL DE CLASIFICACIÓN: RESTRINGIDO</p>
+    <p class="warning">ADVERTENCIA: EL ACCESO NO AUTORIZADO ESTÁ PENADO POR LEY</p>
+    <div id="terminalText"></div>
+    <input type="password" id="clave" placeholder="INTRODUZCA SU CLAVE DE ACCESO">
+    <button onclick="verificar()">AUTENTICAR</button>
+    <p id="mensaje"></p>
+  </div>
+</div>
+
+<!-- Base de datos -->
+<div class="database hidden" id="database">
+  <h1>BASE DE DATOS DE CASOS - POLICÍA NACIONAL</h1>
+  <p class="classification">NIVEL DE AUTORIZACIÓN: ACCESO PERMITIDO</p>
+
+  <div class="case">
+    <h3><a href="casos/001.html">EXPEDIENTE 001</a></h3>
+    <p>Primeras investigaciones sobre El Inquisidor.</p>
+  </div>
+
+  <div class="case">
+    <h3><a href="casos/002.html">EXPEDIENTE 002</a></h3>
+    <p>Comunicaciones de El Inquisidor.</p>
+  </div>
+
+</div>
+
+<script>
+// Animación tipo terminal
+const texto = [
+  "INICIALIZANDO BASE DE DATOS DE LA POLICÍA NACIONAL...",
+  "CONECTANDO CON SERVIDOR SEGURO...",
+  "VERIFICANDO RED...",
+  "SISTEMA LISTO."
+];
+
+let i = 0;
+function escribir(){
+  if(i < texto.length){
+    let terminal = document.getElementById("terminalText");
+    terminal.innerHTML += texto[i] + "<br>";
+    i++;
+    setTimeout(escribir,800);
+  }
+}
+escribir();
+
+// Clave ARG
+const claveSecreta = "PN-2026-SEC";
+
+function verificar(){
+  let clave = document.getElementById("clave").value;
+  let mensaje = document.getElementById("mensaje");
+
+  if(clave === claveSecreta){
+    mensaje.innerText="ACCESO PERMITIDO";
+    setTimeout(()=>{
+      document.getElementById("loginScreen").style.display="none";
+      document.getElementById("database").classList.remove("hidden");
+      window.scrollTo(0,0);
+    },1500);
+  } else {
+    mensaje.innerText="ACCESO DENEGADO";
+  }
+}
+</script>
+
+</body>
+</html>

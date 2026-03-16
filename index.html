@@ -1,138 +1,244 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
+
 <meta charset="UTF-8">
 <title>Terminal Segura - Policía Nacional</title>
+
 <style>
+
 body{
-  background:#050505;
-  color:#00ff66;
-  font-family:Courier New, monospace;
-  margin:0;
-  padding:0;
+background:#050505;
+color:#00ff66;
+font-family:Courier New, monospace;
+margin:0;
+padding:0;
 }
+
 .center{
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  height:100vh;
+display:flex;
+justify-content:center;
+align-items:center;
+height:100vh;
+}
+
+.terminal{
+border:2px solid #00ff66;
+padding:40px;
+width:600px;
+box-shadow:0 0 25px #00ff66;
+text-align:center;
+}
+
+.database{
+width:900px;
+margin:auto;
+margin-top:80px;
+margin-bottom:80px;
+}
+
+h1{
+border-bottom:1px solid #00ff66;
+padding-bottom:10px;
+}
+
+h2{
+margin-top:40px;
+border-bottom:1px dashed #00ff66;
+padding-bottom:8px;
+font-size:22px;
+}
+
+.classification{
+color:#ff4444;
+font-size:14px;
+}
+
+.warning{
+font-size:12px;
+margin-bottom:20px;
+}
+
+input{
+width:100%;
+padding:10px;
+background:black;
+border:1px solid #00ff66;
+color:#00ff66;
+margin-top:20px;
+box-sizing:border-box;
+}
+
+button{
+margin-top:20px;
+padding:10px;
+width:100%;
+background:#001a00;
+border:1px solid #00ff66;
+color:#00ff66;
+cursor:pointer;
+}
+
+button:hover{
+background:#002600;
+}
+
+.case{
+border:1px solid #00ff66;
+padding:20px;
+margin-top:20px;
+box-shadow:0 0 10px rgba(0,255,102,0.25);
+}
+
+.case h3{
+margin-top:0;
+}
+
+a{
+color:#00ff66;
+text-decoration:none;
+}
+
+a:hover{
+text-shadow:0 0 8px #00ff66;
+}
+
+.hidden{
+display:none;
+}
+
+.status-line{
+margin-top:15px;
+font-size:13px;
+color:#99ffbb;
+}
+
+.grid{
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:20px;
+}
+
+@media(max-width: 760px){
+.database{
+width:92%;
 }
 .terminal{
-  border:2px solid #00ff66;
-  padding:40px;
-  width:600px;
-  box-shadow:0 0 25px #00ff66;
-  text-align:center;
+width:90%;
+padding:25px;
 }
-.database{
-  width:800px;
-  margin:auto;
-  margin-top:80px;
+.grid{
+grid-template-columns:1fr;
 }
-h1{
-  border-bottom:1px solid #00ff66;
-  padding-bottom:10px;
 }
-.classification{
-  color:#ff4444;
-  font-size:14px;
-}
-.warning{
-  font-size:12px;
-  margin-bottom:20px;
-}
-input{
-  width:100%;
-  padding:10px;
-  background:black;
-  border:1px solid #00ff66;
-  color:#00ff66;
-  margin-top:20px;
-}
-button{
-  margin-top:20px;
-  padding:10px;
-  width:100%;
-  background:#001a00;
-  border:1px solid #00ff66;
-  color:#00ff66;
-  cursor:pointer;
-}
-.case{
-  border:1px solid #00ff66;
-  padding:20px;
-  margin-top:20px;
-}
-a{
-  color:#00ff66;
-  text-decoration:none;
-}
-.hidden{
-  display:none;
-}
+
 </style>
+
 </head>
+
 <body>
 
 <!-- Pantalla de login -->
 <div class="center" id="loginScreen">
   <div class="terminal">
+
     <h1>TERMINAL SEGURA - POLICÍA NACIONAL</h1>
-    <p class="classification">NIVEL DE CLASIFICACIÓN: RESTRINGIDO</p>
-    <p class="warning">ADVERTENCIA: EL ACCESO NO AUTORIZADO ESTÁ PENADO POR LEY</p>
+
+    <p class="classification">
+      NIVEL DE CLASIFICACIÓN: RESTRINGIDO
+    </p>
+
+    <p class="warning">
+      ADVERTENCIA: EL ACCESO NO AUTORIZADO ESTÁ PENADO POR LEY
+    </p>
+
     <div id="terminalText"></div>
+
     <input type="password" id="clave" placeholder="INTRODUZCA SU CLAVE DE ACCESO">
+
     <button onclick="verificar()">AUTENTICAR</button>
+
     <p id="mensaje"></p>
+
   </div>
 </div>
 
 <!-- Base de datos -->
 <div class="database hidden" id="database">
+
   <h1>BASE DE DATOS DE CASOS - POLICÍA NACIONAL</h1>
-  <p class="classification">NIVEL DE AUTORIZACIÓN: ACCESO PERMITIDO</p>
 
-  <div class="case">
-    <h3><a href="casos/001.html">EXPEDIENTE 001</a></h3>
-    <p>Primeras investigaciones sobre El Inquisidor.</p>
+  <p class="classification">
+    NIVEL DE AUTORIZACIÓN: ACCESO PERMITIDO
+  </p>
+
+  <p class="status-line">
+    SISTEMA CENTRAL OPERATIVO // CONSULTA DE EXPEDIENTES Y ARCHIVOS INTERCEPTADOS
+  </p>
+
+  <h2>CASOS ACTIVOS</h2>
+
+  <div class="grid">
+
+    <div class="case">
+      <h3><a href="casos/001.html">EXPEDIENTE 001</a></h3>
+      <p>Primeras investigaciones sobre El Inquisidor.</p>
+      <p>ESTADO: ABIERTO</p>
+    </div>
+
+    <div class="case">
+      <h3><a href="casos/002.html">EXPEDIENTE 002</a></h3>
+      <p>Comunicaciones de El Inquisidor.</p>
+      <p>ESTADO: EN SEGUIMIENTO</p>
+    </div>
+
+    <div class="case">
+      <h3><a href="casos/003.html">EXPEDIENTE 003</a></h3>
+      <p>Material clasificado recuperado durante inspección en los estudios de R-LUX.</p>
+      <p>ESTADO: ARCHIVOS RESERVADOS</p>
+    </div>
+
+    <div class="case">
+      <h3><a href="geolocalizacion.html">SEGUIMIENTO DE GEOLOCALIZACIÓN</a></h3>
+      <p>Monitorización de movimiento sospechoso en Aranjuez.</p>
+      <p>ESTADO: ACTIVO</p>
+    </div>
+
+    <div class="case">
+      <h3><a href="escuchas.html">ESCUCHAS INTERCEPTADAS</a></h3>
+      <p>Registro de comunicaciones de audio interceptadas al sospechoso.</p>
+      <p>ESTADO: MATERIAL SENSIBLE</p>
+    </div>
+
   </div>
-
-  <div class="case">
-    <h3><a href="casos/002.html">EXPEDIENTE 002</a></h3>
-    <p>Comunicaciones de El Inquisidor.</p>
-  </div>
-
-<div class="case">
-
-<h3><a href="escuchas.html">ESCUCHAS INTERCEPTADAS</a></h3>
-
-<p>Registro de comunicaciones interceptadas al sospechoso.</p>
-
-</div>
 
 </div>
 
 <script>
+
 // Animación tipo terminal
 const texto = [
-  "INICIALIZANDO BASE DE DATOS DE LA POLICÍA NACIONAL...",
-  "CONECTANDO CON SERVIDOR SEGURO...",
-  "VERIFICANDO RED...",
-  "SISTEMA LISTO."
+"INICIALIZANDO BASE DE DATOS DE LA POLICÍA NACIONAL...",
+"CONECTANDO CON SERVIDOR SEGURO...",
+"VERIFICANDO RED...",
+"CARGANDO EXPEDIENTES ACTIVOS...",
+"SISTEMA LISTO."
 ];
 
 let i = 0;
+
 function escribir(){
   if(i < texto.length){
     let terminal = document.getElementById("terminalText");
     terminal.innerHTML += texto[i] + "<br>";
     i++;
-    setTimeout(escribir,800);
+    setTimeout(escribir, 800);
   }
 }
+
 escribir();
 
-// Clave ARG
+// Contraseña
 const claveSecreta = "PN-2026-SEC";
 
 function verificar(){
@@ -140,16 +246,28 @@ function verificar(){
   let mensaje = document.getElementById("mensaje");
 
   if(clave === claveSecreta){
-    mensaje.innerText="ACCESO PERMITIDO";
+    mensaje.innerText = "ACCESO PERMITIDO";
+
     setTimeout(()=>{
-      document.getElementById("loginScreen").style.display="none";
+      document.getElementById("loginScreen").style.display = "none";
       document.getElementById("database").classList.remove("hidden");
+      sessionStorage.setItem("accesoAutorizado", "true");
       window.scrollTo(0,0);
     },1500);
-  } else {
-    mensaje.innerText="ACCESO DENEGADO";
+
+  }else{
+    mensaje.innerText = "ACCESO DENEGADO";
   }
 }
+
+// Mantener sesión al volver desde expedientes
+window.onload = function(){
+  if(sessionStorage.getItem("accesoAutorizado") === "true"){
+    document.getElementById("loginScreen").style.display = "none";
+    document.getElementById("database").classList.remove("hidden");
+  }
+}
+
 </script>
 
 </body>

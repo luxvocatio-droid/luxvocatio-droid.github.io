@@ -2,65 +2,85 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<title>Geolocalización - Policía Nacional</title>
+<title>Control de Seguimiento - Policía Nacional</title>
 
 <style>
 body{
+margin:0;
+padding:0;
 background:#050505;
 color:#00ff66;
 font-family:Courier New, monospace;
-margin:0;
-padding:0;
+overflow:hidden;
 }
 
-.database{
-width:900px;
-margin:auto;
-margin-top:80px;
-margin-bottom:80px;
+.topbar{
+position:absolute;
+top:20px;
+left:20px;
+z-index:10;
 }
 
-h1{
+.back-btn{
+display:inline-block;
+color:#00ff66;
+text-decoration:none;
+border:1px solid #00ff66;
+padding:10px 16px;
+background:#001a00;
+box-shadow:0 0 10px #00ff66;
+}
+
+.back-btn:hover{
+background:#003300;
+box-shadow:0 0 18px #00ff66;
+}
+
+.panel{
+position:absolute;
+top:20px;
+right:20px;
+width:320px;
+border:1px solid #00ff66;
+background:rgba(0,20,0,0.85);
+padding:20px;
+box-shadow:0 0 20px #00ff66;
+z-index:10;
+}
+
+.panel h2{
+margin-top:0;
+font-size:20px;
 border-bottom:1px solid #00ff66;
 padding-bottom:10px;
 }
 
 .classification{
 color:#ff4444;
-font-size:14px;
+font-size:13px;
+margin-bottom:15px;
 }
 
-.warning{
-font-size:12px;
-margin-bottom:20px;
-}
-
-.panel{
-border:1px solid #00ff66;
-padding:20px;
-margin-top:20px;
-box-shadow:0 0 15px rgba(0,255,102,0.2);
-background:#020202;
-}
-
-.radar-container{
+.map-container{
+width:100vw;
+height:100vh;
 display:flex;
 justify-content:center;
 align-items:center;
-margin-top:30px;
-margin-bottom:30px;
 }
 
 .radar{
-position:relative;
-width:500px;
-height:500px;
+width:600px;
+height:600px;
 border:2px solid #00ff66;
 border-radius:50%;
+position:relative;
+box-shadow:0 0 30px #00ff66;
 background:
-radial-gradient(circle, rgba(0,255,102,0.12) 0%, rgba(0,0,0,0.95) 70%),
-repeating-radial-gradient(circle, rgba(0,255,102,0.12) 0px, rgba(0,255,102,0.12) 2px, transparent 2px, transparent 70px);
-box-shadow:0 0 25px rgba(0,255,102,0.25), inset 0 0 30px rgba(0,255,102,0.15);
+radial-gradient(circle at center, rgba(0,255,102,0.15) 0%, rgba(0,0,0,0.95) 70%),
+repeating-radial-gradient(circle at center,
+transparent 0 60px,
+rgba(0,255,102,0.15) 61px 62px);
 overflow:hidden;
 }
 
@@ -68,7 +88,7 @@ overflow:hidden;
 .radar::after{
 content:"";
 position:absolute;
-background:rgba(0,255,102,0.18);
+background:rgba(0,255,102,0.25);
 }
 
 .radar::before{
@@ -82,335 +102,106 @@ transform:translateX(-50%);
 .radar::after{
 height:2px;
 width:100%;
-top:50%;
 left:0;
+top:50%;
 transform:translateY(-50%);
 }
-
-.ring{
-position:absolute;
-border:1px solid rgba(0,255,102,0.25);
-border-radius:50%;
-top:50%;
-left:50%;
-transform:translate(-50%,-50%);
-}
-
-.ring1{width:120px;height:120px;}
-.ring2{width:240px;height:240px;}
-.ring3{width:360px;height:360px;}
 
 .sweep{
 position:absolute;
 width:50%;
 height:2px;
+background:linear-gradient(to right, rgba(0,255,102,0.9), rgba(0,255,102,0));
 top:50%;
 left:50%;
 transform-origin:left center;
-background:linear-gradient(to right, rgba(0,255,102,0.95), rgba(0,255,102,0.05));
-box-shadow:0 0 18px #00ff66;
-animation:giro 4s linear infinite;
-z-index:2;
+animation:spin 3s linear infinite;
+box-shadow:0 0 20px #00ff66;
 }
 
-.sweep-glow{
+@keyframes spin{
+from{ transform:rotate(0deg); }
+to{ transform:rotate(360deg); }
+}
+
+.target{
 position:absolute;
-width:50%;
-height:50%;
-top:0;
-left:50%;
-transform-origin:bottom left;
-background:conic-gradient(from 180deg, rgba(0,255,102,0.22), rgba(0,255,102,0.02), transparent 55deg);
-animation:giroCono 4s linear infinite;
-z-index:1;
-}
-
-@keyframes giro{
-from{transform:rotate(0deg);}
-to{transform:rotate(360deg);}
-}
-
-@keyframes giroCono{
-from{transform:rotate(0deg);}
-to{transform:rotate(360deg);}
-}
-
-.marker{
-position:absolute;
-width:14px;
-height:14px;
+width:16px;
+height:16px;
 border-radius:50%;
 background:#00ff66;
-box-shadow:0 0 12px #00ff66, 0 0 24px #00ff66;
-animation:pulse 1.6s infinite;
-z-index:5;
-}
-
-.marker::after{
-content:"";
-position:absolute;
-width:28px;
-height:28px;
-border:1px solid rgba(0,255,102,0.5);
-border-radius:50%;
-top:50%;
-left:50%;
+box-shadow:0 0 20px #00ff66, 0 0 40px #00ff66;
 transform:translate(-50%,-50%);
+animation:pulse 1.5s infinite;
 }
 
 @keyframes pulse{
-0%{transform:scale(1);opacity:1;}
-50%{transform:scale(1.35);opacity:0.65;}
-100%{transform:scale(1);opacity:1;}
+0%{ transform:translate(-50%,-50%) scale(1); opacity:1; }
+50%{ transform:translate(-50%,-50%) scale(1.6); opacity:0.6; }
+100%{ transform:translate(-50%,-50%) scale(1); opacity:1; }
 }
 
-.marker-label{
+.coords{
 position:absolute;
-font-size:12px;
-background:#001a00;
-padding:5px 8px;
-border:1px solid #00ff66;
-white-space:nowrap;
-z-index:6;
-box-shadow:0 0 10px rgba(0,255,102,0.25);
-}
-
-.data-grid{
-display:grid;
-grid-template-columns:1fr 1fr;
-gap:20px;
-margin-top:20px;
-}
-
-.data-box{
+bottom:30px;
+left:30px;
 border:1px solid #00ff66;
 padding:15px;
-background:#000;
+background:rgba(0,20,0,0.85);
+box-shadow:0 0 15px #00ff66;
+z-index:10;
+max-width:420px;
 }
 
-.status-live{
+.small{
+font-size:13px;
 color:#99ffbb;
-margin-top:10px;
-font-size:13px;
-}
-
-.alert{
-margin-top:20px;
-padding:15px;
-border:1px solid #ff4444;
-color:#ff8888;
-background:#120000;
-box-shadow:0 0 10px rgba(255,68,68,0.2);
-}
-
-button{
-margin-top:15px;
-padding:10px;
-width:100%;
-background:#001a00;
-border:1px solid #00ff66;
-color:#00ff66;
-cursor:pointer;
-font-family:Courier New, monospace;
-}
-
-button:hover{
-background:#002600;
-}
-
-a{
-color:#00ff66;
-text-decoration:none;
-}
-
-.log{
-margin-top:20px;
-border:1px solid #00ff66;
-padding:15px;
-background:#000;
-font-size:13px;
-line-height:1.6;
-min-height:120px;
-}
-
-@media(max-width: 760px){
-.database{
-width:92%;
-}
-.data-grid{
-grid-template-columns:1fr;
-}
-.radar{
-width:320px;
-height:320px;
-}
-.ring1{width:80px;height:80px;}
-.ring2{width:160px;height:160px;}
-.ring3{width:240px;height:240px;}
 }
 </style>
 </head>
+
 <body>
 
-<div class="database">
-
-<h1>SEGUIMIENTO DE GEOLOCALIZACIÓN</h1>
-
-<p class="classification">
-DIVISIÓN DE ANÁLISIS Y SEGUIMIENTO - POLICÍA NACIONAL
-</p>
-
-<p class="warning">
-MONITORIZACIÓN DE MOVIMIENTO SOSPECHOSO // ZONA: ARANJUEZ
-</p>
+<div class="topbar">
+<a href="../index.html" class="back-btn">← VOLVER A BASE DE DATOS</a>
+</div>
 
 <div class="panel">
-<p>OBJETIVO PRINCIPAL: CENTRO PRIVADO DE EDUCACIÓN INFANTIL, PRIMARIA Y SECUNDARIA SAGRADA FAMILIA</p>
-<p>ESTADO DEL SISTEMA: SONAR DE RASTREO ACTIVO</p>
-<p class="status-live" id="estadoSistema">ÚLTIMA ACTUALIZACIÓN: OBJETIVO FIJADO EN RADAR</p>
-</div>
+<h2>CONTROL DE SEGUIMIENTO</h2>
+<div class="classification">NIVEL DE CLASIFICACIÓN: RESERVADO</div>
 
-<div class="radar-container">
-<div class="radar">
+<p><strong>OBJETIVO:</strong> SOSPECHOSO EN VIGILANCIA</p>
+<p><strong>ÚLTIMA ZONA:</strong> PERIFERIA DE ARANJUEZ</p>
+<p><strong>PUNTO DETECTADO:</strong> ÁREA EXTERIOR NO URBANIZADA</p>
+<p><strong>HORA DEL REGISTRO:</strong> 21:15</p>
+<p><strong>FECHA:</strong> 18/03/2026</p>
+<p><strong>ESTADO:</strong> SEÑAL ACTIVA</p>
 
-<div class="ring ring1"></div>
-<div class="ring ring2"></div>
-<div class="ring ring3"></div>
-
-<div class="sweep"></div>
-<div class="sweep-glow"></div>
-
-<div class="marker" id="marcador" style="top:220px; left:315px;"></div>
-<div class="marker-label" id="etiqueta" style="top:195px; left:335px;">ÚLTIMA LOCALIZACIÓN DETECTADA</div>
-
-</div>
-</div>
-
-<div class="data-grid">
-  <div class="data-box">
-    <p>ID DE RASTREO: PN-ARJ-047A</p>
-    <p>OBJETIVO: INDIVIDUO EN SEGUIMIENTO</p>
-    <p>ZONA ACTUAL: <span id="zonaActual">ENTORNO SAGRADA FAMILIA</span></p>
-    <p>RIESGO OPERATIVO: MEDIO / ELEVADO</p>
-    <p>SEÑAL GPS: ESTABLE</p>
-  </div>
-
-  <div class="data-box">
-    <p>COORDENADAS SIMULADAS:</p>
-    <p id="coords">40.0318, -3.6024</p>
-    <p>ÚLTIMO MOVIMIENTO: <span id="movimiento">PRESENCIA DETECTADA EN EL PERÍMETRO</span></p>
-    <p>HORA DEL ÚLTIMO REGISTRO: <span id="hora">22:14</span></p>
-    <button onclick="actualizarLocalizacion()">ACTUALIZAR ÚLTIMA LOCALIZACIÓN</button>
-  </div>
-</div>
-
-<div class="alert" id="alerta">
-ALERTA: EL SISTEMA SOLO MUESTRA LA ÚLTIMA POSICIÓN CONFIRMADA DEL OBJETIVO.
-</div>
-
-<div class="log" id="registro">
-[LOG DEL SISTEMA]<br>
-> INICIALIZANDO MÓDULO DE GEOLOCALIZACIÓN...<br>
-> CARGANDO INTERFAZ SONAR...<br>
-> CONEXIÓN ESTABLECIDA CON NODO ARANJUEZ...<br>
-> ÚLTIMA POSICIÓN DEL OBJETIVO FIJADA EN RADAR...
-</div>
-
-<p style="margin-top:30px;">
-<a href="index.html#database">← VOLVER A BASE DE DATOS</a>
+<p style="margin-top:10px; color:#99ffbb;">
+ÚLTIMA SEÑAL AISLADA CAPTADA FUERA DEL NÚCLEO URBANO.
 </p>
-
 </div>
 
-<script>
-const posiciones = [
-{
-top:"220px",
-left:"315px",
-labelTop:"195px",
-labelLeft:"335px",
-zona:"ENTORNO SAGRADA FAMILIA",
-coords:"40.0318, -3.6024",
-movimiento:"PRESENCIA DETECTADA EN EL PERÍMETRO",
-hora:"22:14",
-estado:"ÚLTIMA ACTUALIZACIÓN: OBJETIVO FIJADO EN RADAR",
-log:"> EVENTO 22:14 // POSICIÓN FIJADA CERCA DEL CENTRO SAGRADA FAMILIA."
-},
-{
-top:"135px",
-left:"185px",
-labelTop:"110px",
-labelLeft:"205px",
-zona:"ACCESO NORTE",
-coords:"40.0321, -3.6031",
-movimiento:"SEÑAL BREVE CAPTADA EN EL SECTOR NORTE",
-hora:"22:16",
-estado:"ÚLTIMA ACTUALIZACIÓN: NUEVA FIJACIÓN EN ACCESO NORTE",
-log:"> EVENTO 22:16 // NUEVA LOCALIZACIÓN AISLADA REGISTRADA EN ACCESO NORTE."
-},
-{
-top:"320px",
-left:"210px",
-labelTop:"295px",
-labelLeft:"230px",
-zona:"SALIDA SECUNDARIA",
-coords:"40.0311, -3.6036",
-movimiento:"SEÑAL DETECTADA EN EL FLANCO SUR",
-hora:"22:19",
-estado:"ÚLTIMA ACTUALIZACIÓN: ECO DETECTADO EN SALIDA SECUNDARIA",
-log:"> EVENTO 22:19 // EL SONAR FIJA ÚLTIMA POSICIÓN EN EL PERÍMETRO SUR."
-},
-{
-top:"320px",
-left:"360px",
-labelTop:"295px",
-labelLeft:"380px",
-zona:"SECTOR VIGILADO",
-coords:"40.0312, -3.6018",
-movimiento:"PARADA TEMPORAL REGISTRADA",
-hora:"22:21",
-estado:"ÚLTIMA ACTUALIZACIÓN: OBJETIVO INMÓVIL DURANTE BREVE INTERVALO",
-log:"> EVENTO 22:21 // LA ÚLTIMA LECTURA INDICA UNA DETENCIÓN TEMPORAL."
-},
-{
-top:"120px",
-left:"335px",
-labelTop:"95px",
-labelLeft:"355px",
-zona:"PUNTO DE OBSERVACIÓN 2",
-coords:"40.0323, -3.6019",
-movimiento:"CAMBIO DE POSICIÓN DETECTADO",
-hora:"22:24",
-estado:"ÚLTIMA ACTUALIZACIÓN: REUBICACIÓN DE LA SEÑAL",
-log:"> EVENTO 22:24 // LA ÚLTIMA SEÑAL FIJADA APUNTA A UN CAMBIO DE POSICIÓN."
-}
-];
+<div class="map-container">
+<div class="radar">
+<div class="sweep"></div>
 
-let indice = 0;
+<!-- PUNTO FIJO EN PERIFERIA -->
+<div class="target" style="top:32%; left:78%;"></div>
 
-function actualizarLocalizacion(){
-indice = (indice + 1) % posiciones.length;
-const p = posiciones[indice];
+</div>
+</div>
 
-document.getElementById("marcador").style.top = p.top;
-document.getElementById("marcador").style.left = p.left;
-
-document.getElementById("etiqueta").style.top = p.labelTop;
-document.getElementById("etiqueta").style.left = p.labelLeft;
-
-document.getElementById("zonaActual").innerText = p.zona;
-document.getElementById("coords").innerText = p.coords;
-document.getElementById("movimiento").innerText = p.movimiento;
-document.getElementById("hora").innerText = p.hora;
-document.getElementById("estadoSistema").innerText = p.estado;
-
-const registro = document.getElementById("registro");
-registro.innerHTML += "<br>" + p.log;
-}
-
-<a href="../index.html" class="back-btn">← VOLVER A BASE DE DATOS</a>
-
-</script>
+<div class="coords">
+<p><strong>ÚLTIMA LOCALIZACIÓN REGISTRADA</strong></p>
+<p class="small">MUNICIPIO: ARANJUEZ (PERIFERIA)</p>
+<p class="small">ZONA: ÁREA EXTERIOR / ACCESO RURAL</p>
+<p class="small">COORDENADAS: 40.0289, -3.5902</p>
+<p class="small">HORA: 21:15</p>
+<p class="small">FECHA: 18/03/2026</p>
+<p class="small">SEÑAL: DETECTADA / FIJA</p>
+<p class="small">TRIANGULACIÓN: COMPLETADA</p>
+</div>
 
 </body>
 </html>
